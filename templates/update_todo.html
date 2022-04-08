@@ -1,0 +1,73 @@
+{%extends 'bootstrap/base.html'%}
+{%block content%}
+{%include 'header.html'%}
+
+<!--TODO:if logged in, show header-->
+
+{%if current_user.is_authenticated%}
+        <!-- Header - set the background image for the header in the line below-->
+        <header class="py-5 bg-image-full" style="background-image: url('https://source.unsplash.com/wfh8dDlNFOk/1600x900')">
+            <div class="text-center my-5">
+                <img class="img-fluid rounded-circle mb-4" src="https://dummyimage.com/150x150/6c757d/dee2e6.jpg" alt="..." />
+                <h1 class="text-white fs-3 fw-bolder">{{current_user.name.upper()}}</h1>
+                <p class="text-white-50 mb-0">Stay on top of your day</p>
+            </div>
+        </header>
+{%endif%}
+
+
+        <!-- Content section-->
+        <section class="py-5">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <form method="POST" action={{url_for('update_todos')}}>
+
+                            <div class = "form-group">
+                                {%if todo_list == []%}
+                                <input type = 'todo' class ='custom-inputbox' name = 'list_name', placeholder = 'My To-Do list for {{placeholder_date}}'><br>
+                                {%else%}
+                                <input type = 'todo' class ='custom-inputbox' name = 'list_name', value = "{{todo_list[-1].list_name}}"><br>
+                                {%endif%}
+                                <label for = 'InputTodo'> Create your to-do list below</label>
+                                <input type = 'todo' class ='form-control' name = 'InputTodo', placeholder = 'Write your Task here'>
+                                <input type = 'submit' value = 'Save'>
+                                <h3><a href={{url_for('delete_all')}}>Delete All</a></h3>
+
+                            </div>
+<!--                        <h2>Create your to-do list bellow</h2>-->
+<!--                        <p class="lead">#1 Todo</p>-->
+<!--                            <p class="mb-0">#todo NOTES.</p>-->
+<!--                                TODO: show all todo-->
+
+                        {%if todo != None%}
+                        {%for todo in todo_list%}
+
+                            {%if todo.checked%}
+                        <input type = 'checkbox' value = {{todo.id}} id = {{todo.id}} name = 'todo_list' checked>
+                        <label for={{todo.id}} value = {{todo.id}} > {{todo.todo}}</label>
+                            <a href = {{url_for('delete_one', id = todo.id)}}>❌ </a>
+                            <br>
+
+                            {%else%}
+                             <input type = 'checkbox' value = {{todo.id}} id = {{todo.id}} name = 'todo_list'>
+                        <label for={{todo.id}} value = {{todo.id}} > {{todo.todo}}</label><a href = {{url_for('delete_one', id = todo.id)}}>❌ </a><br>
+
+
+
+                            {%endif%}
+                        {%endfor%}
+
+                        {%else%}
+                        No To-Do.
+                        {%endif%}
+                            </form>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+{%include 'footer.html'%}
+{%endblock%}
